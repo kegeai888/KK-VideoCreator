@@ -40,6 +40,15 @@ docs/*
 
 # Script files (internal tools)
 *.ps1
+cc.sh
+
+# Large model/binary files
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.onnx
+*.bin
 
 # Story/script content
 沪商通途*

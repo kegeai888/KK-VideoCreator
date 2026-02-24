@@ -278,11 +278,11 @@ export function Dashboard() {
       {/* Header */}
       <div className="h-16 border-b border-border bg-panel px-8 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 bg-primary text-primary-foreground flex items-center justify-center">
-            <Aperture className="w-6 h-6" />
+          <div className="w-10 h-10 flex items-center justify-center">
+            <img src="/favicon.png" alt="Logo" className="w-10 h-10" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-foreground tracking-wide">魔因漫创</h1>
+            <h1 className="text-lg font-bold text-foreground tracking-wide">坤坤漫创工具箱</h1>
             <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Moyin Creator Studio</p>
           </div>
         </div>

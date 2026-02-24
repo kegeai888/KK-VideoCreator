@@ -110,7 +110,7 @@ export function TabBar() {
       {/* Logo + Back */}
       <div className="p-2 border-b border-border">
         <div className="w-8 h-8 bg-primary text-primary-foreground flex items-center justify-center mx-auto rounded mb-1">
-          <span className="text-sm font-bold">M</span>
+          <span className="text-sm font-bold">K</span>
         </div>
         <TooltipProvider delayDuration={300}>
           <Tooltip>

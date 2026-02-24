@@ -32,7 +32,7 @@ import type { IProvider } from "@/lib/api-key-manager";
 
 /**
  * 平台预设配置
- * 1. 魔因API (memefast) - 全功能中转（推荐）
+ * 1. 国际API+ (kegeai) - 全功能中转（推荐）
  * 2. RunningHub - 视角切换/多角度生成
  * 3. 自定义 - OpenAI 兼容 API
  */
@@ -46,10 +46,10 @@ const PLATFORM_PRESETS: Array<{
   recommended?: boolean;
 }> = [
   {
-    platform: "memefast",
-    name: "魔因API",
-    baseUrl: "https://memefast.top",
-    description: "543+ 模型中转，支持 GPT/Claude/Gemini/DeepSeek/Veo/Sora 等",
+    platform: "kegeai",
+    name: "国际API+",
+    baseUrl: "https://ai.kegeai.top",
+    description: "580+ 模型中转，支持 GPT/Claude/Gemini/DeepSeek/Veo/Sora 等",
     services: ["对话", "图片生成", "视频生成", "图片理解"],
     models: [
       "deepseek-v3.2",
@@ -110,7 +110,7 @@ export function AddProviderDialog({
   // Reset form when dialog opens
   useEffect(() => {
     if (open) {
-      setPlatform("");
+      setPlatform("kegeai"); // 默认选择国际API+
       setName("");
       setBaseUrl("");
       setApiKey("");
@@ -163,14 +163,14 @@ export function AddProviderDialog({
     });
 
     onOpenChange(false);
-    toast.success(isMemefastAppend ? `已追加 Key 到 ${name}` : `已添加 ${name}`);
+    toast.success(isKegeaiAppend ? `已追加 Key 到 ${name}` : `已添加 ${name}`);
   };
 
-  // Filter out already existing platforms (except custom and memefast which allow repeat add)
+  // Filter out already existing platforms (except custom and kegeai which allow repeat add)
   const availablePlatforms = PLATFORM_PRESETS.filter(
-    (p) => p.platform === "custom" || p.platform === "memefast" || !existingPlatforms.includes(p.platform)
+    (p) => p.platform === "custom" || p.platform === "kegeai" || !existingPlatforms.includes(p.platform)
   );
-  const isMemefastAppend = platform === "memefast" && existingPlatforms.includes("memefast");
+  const isKegeaiAppend = platform === "kegeai" && existingPlatforms.includes("kegeai");
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -257,7 +257,7 @@ export function AddProviderDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             取消
           </Button>
-          <Button onClick={handleSubmit}>{isMemefastAppend ? "追加 Key" : "添加"}</Button>
+          <Button onClick={handleSubmit}>{isKegeaiAppend ? "追加 Key" : "添加"}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -32,16 +32,16 @@ export interface IProvider {
 /**
  * Default provider templates
  * 默认供应商模板
- * 
+ *
  * 核心供应商：
- * 1. 魔因API (memefast) - 全功能 AI 中转（推荐），支持文本/图片/视频/识图
+ * 1. 国际API+ (kegeai) - 全功能 AI 中转（推荐），支持文本/图片/视频/识图
  * 2. RunningHub - 视角切换/多角度生成
  */
 export const DEFAULT_PROVIDERS: Omit<IProvider, 'id' | 'apiKey'>[] = [
   {
-    platform: 'memefast',
-    name: '魔因API',
-    baseUrl: 'https://memefast.top',
+    platform: 'kegeai',
+    name: '国际API+',
+    baseUrl: 'https://ai.kegeai.top',
     model: [
       'deepseek-v3.2',
       'glm-4.7',

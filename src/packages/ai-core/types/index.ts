@@ -144,7 +144,7 @@ export interface GenerationConfig {
 /**
  * API provider identifier
  */
-export type ProviderId = 'memefast' | 'runninghub' | 'openai' | 'custom';
+export type ProviderId = 'kegeai' | 'memefast' | 'runninghub' | 'openai' | 'custom';
 
 /**
  * Service type

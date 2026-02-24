@@ -77,7 +77,8 @@ import { uploadToImageHost } from "@/lib/image-host";
 
 // Platform icon mapping
 const PLATFORM_ICONS: Record<string, React.ReactNode> = {
-  memefast: <Zap className="h-5 w-5" />,
+  kegeai: <Zap className="h-5 w-5" />,
+  memefast: <Zap className="h-5 w-5" />, // Legacy compatibility
   runninghub: <Image className="h-5 w-5" />,
   custom: <Settings className="h-5 w-5" />,
 };
@@ -494,7 +495,7 @@ export function SettingsPanel() {
             </span>
             <Button onClick={() => setAddDialogOpen(true)} size="sm">
               <Plus className="h-4 w-4 mr-1" />
-              添加供应商
+              添加API供应商
             </Button>
           </div>
         )}
@@ -554,7 +555,7 @@ export function SettingsPanel() {
 
           {/* MemeFast 购买引导 */}
           <a
-            href="https://memefast.top"
+            href="https://ai.kegeai.top/register?aff=78Gs"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-3 p-4 bg-gradient-to-r from-orange-500/5 to-primary/5 border border-orange-500/20 rounded-lg hover:border-orange-500/40 transition-colors group"
@@ -564,16 +565,16 @@ export function SettingsPanel() {
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-medium text-foreground text-sm flex items-center gap-2">
-                魔因API
+                国际API+
                 <span className="text-[10px] px-1.5 py-0.5 bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded">
                   推荐
                 </span>
               </h3>
               <p className="text-xs text-muted-foreground mt-0.5">
-                543+ AI 模型一站式接入，支持 GPT / Claude / Gemini / DeepSeek / Sora 等
+                580+ AI模型一站式接入，支持GPT/CLaude/Gemini/DeepSeek/VEO3/Grok/Sora2/即梦/豆包等等
               </p>
             </div>
-            <span className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-primary group-hover:underline">
+            <span className="shrink-0 inline-flex items-center gap-1.5 text-xs font-medium text-orange-600 dark:text-orange-400 group-hover:underline">
               获取 API Key
               <ExternalLink className="h-3.5 w-3.5" />
             </span>
@@ -596,20 +597,20 @@ export function SettingsPanel() {
                   尚未配置任何供应商
                 </h3>
                 <p className="text-sm text-muted-foreground mb-2">
-                  推荐使用魔因API，支持 543+ 模型一站式接入
+                  推荐使用国际API+，支持 543+ 模型一站式接入
                 </p>
                 <a
-                  href="https://memefast.top"
+                  href="https://ai.kegeai.top/register?aff=78Gs"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline mb-4"
+                  className="inline-flex items-center gap-1.5 text-sm text-orange-600 dark:text-orange-400 hover:underline mb-4"
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
-                  前往魔因API获取 Key
+                  获取API Key
                 </a>
                 <Button onClick={() => setAddDialogOpen(true)}>
                   <Plus className="h-4 w-4 mr-1" />
-                  添加供应商
+                  添加API供应商
                 </Button>
               </div>
             ) : (
@@ -654,7 +655,7 @@ export function SettingsPanel() {
                               <div className="text-left">
                                 <h4 className="font-medium text-foreground flex items-center gap-2">
                                   {provider.name}
-                                  {provider.platform === 'memefast' && (
+                                  {(provider.platform === 'kegeai' || provider.platform === 'memefast') && (
                                     <span className="text-[10px] px-1.5 py-0.5 bg-orange-500/10 text-orange-600 dark:text-orange-400 rounded font-normal">
                                       推荐
                                     </span>
@@ -792,17 +793,17 @@ export function SettingsPanel() {
                           </div>
                         </CollapsibleTrigger>
 
-                        {/* MemeFast 购买引导 */}
-                        {provider.platform === 'memefast' && !configured && (
+                        {/* KegeAI 购买引导 */}
+                        {(provider.platform === 'kegeai' || provider.platform === 'memefast') && !configured && (
                           <div className="px-4 pb-2">
                             <a
-                              href="https://memefast.top"
+                              href="https://ai.kegeai.top/register?aff=78Gs"
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 text-xs text-primary hover:underline"
+                              className="inline-flex items-center gap-1.5 text-xs text-orange-600 dark:text-orange-400 hover:underline"
                             >
                               <ExternalLink className="h-3 w-3" />
-                              前往魔因API获取 Key →
+                              前往国际API+ 获取Key→
                             </a>
                           </div>
                         )}
@@ -893,7 +894,7 @@ export function SettingsPanel() {
 
               {/* About */}
               <div className="text-center py-8 text-muted-foreground border-t border-border">
-                <p className="text-sm font-medium">魔因漫创 Moyin Creator</p>
+                <p className="text-sm font-medium">原创魔因漫创</p>
                 <p className="text-xs mt-1">v0.1.7 · AI 驱动的动漫视频创作工具</p>
               </div>
             </div>
@@ -1039,7 +1040,7 @@ export function SettingsPanel() {
 
               {/* About */}
               <div className="text-center py-8 text-muted-foreground border-t border-border">
-                <p className="text-sm font-medium">魔因漫创 Moyin Creator</p>
+                <p className="text-sm font-medium">原创魔因漫创</p>
                 <p className="text-xs mt-1">v0.1.7 · AI 驱动的动漫视频创作工具</p>
               </div>
             </div>
@@ -1182,7 +1183,7 @@ export function SettingsPanel() {
 
               {/* About */}
               <div className="text-center py-8 text-muted-foreground border-t border-border">
-                <p className="text-sm font-medium">魔因漫创 Moyin Creator</p>
+                <p className="text-sm font-medium">原创魔因漫创</p>
                 <p className="text-xs mt-1">v0.1.7 · AI 驱动的动漫视频创作工具</p>
               </div>
             </div>
@@ -1390,7 +1391,7 @@ export function SettingsPanel() {
 
               {/* About */}
               <div className="text-center py-8 text-muted-foreground border-t border-border">
-                <p className="text-sm font-medium">魔因漫创 Moyin Creator</p>
+                <p className="text-sm font-medium">原创魔因漫创</p>
                 <p className="text-xs mt-1">v0.1.7 · AI 驱动的动漫视频创作工具</p>
               </div>
             </div>
@@ -1403,31 +1404,31 @@ export function SettingsPanel() {
         open={addDialogOpen}
         onOpenChange={setAddDialogOpen}
         onSubmit={(providerData) => {
-          // 魔因API：已存在时合并 Key，不重复创建
-          const existingMemefast = providerData.platform === 'memefast'
-            ? providers.find((p) => p.platform === 'memefast')
+          // 国际API+：已存在时合并 Key，不重复创建
+          const existingKegeai = (providerData.platform === 'kegeai' || providerData.platform === 'memefast')
+            ? providers.find((p) => p.platform === 'kegeai' || p.platform === 'memefast')
             : null;
           let provider: IProvider;
-          if (existingMemefast) {
-            const oldKeys = parseApiKeys(existingMemefast.apiKey);
+          if (existingKegeai) {
+            const oldKeys = parseApiKeys(existingKegeai.apiKey);
             const newKeys = parseApiKeys(providerData.apiKey);
             const merged = Array.from(new Set([...oldKeys, ...newKeys]));
-            updateProvider({ ...existingMemefast, apiKey: merged.join(',') });
-            provider = existingMemefast;
+            updateProvider({ ...existingKegeai, apiKey: merged.join(',') });
+            provider = existingKegeai;
           } else {
             provider = addProvider(providerData);
           }
-          // 如果添加的是 memefast 供应商，自动设置默认服务映射（仅在对应服务尚未配置时）
-          if (providerData.platform === 'memefast') {
+          // 如果添加的是 kegeai/memefast 供应商，自动设置默认服务映射（仅在对应服务尚未配置时）
+          if (providerData.platform === 'kegeai' || providerData.platform === 'memefast') {
             // 使用 provider.id（而非 platform 字符串）避免多供应商时的歧义解析
             const pid = provider.id;
-            const MEMEFAST_DEFAULT_BINDINGS: Record<string, string> = {
+            const KEGEAI_DEFAULT_BINDINGS: Record<string, string> = {
               script_analysis: `${pid}:deepseek-v3`,
               character_generation: `${pid}:gemini-3-pro-image-preview`,
               video_generation: `${pid}:doubao-seedance-1-5-pro-251215`,
               image_understanding: `${pid}:gemini-2.5-flash`,
             };
-            for (const [feature, binding] of Object.entries(MEMEFAST_DEFAULT_BINDINGS)) {
+            for (const [feature, binding] of Object.entries(KEGEAI_DEFAULT_BINDINGS)) {
               const current = getFeatureBindings(feature as AIFeature);
               if (!current || current.length === 0) {
                 setFeatureBindings(feature as AIFeature, [binding]);

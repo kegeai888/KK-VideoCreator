@@ -43,7 +43,7 @@ export type AIFeature =
 /**
  * 功能绑定配置
  * 每个功能可绑定多个供应商/模型（多选）
- * 格式: platform:model 数组，如 ['memefast:deepseek-v3.2', 'memefast:gemini-3-pro-image-preview']
+ * 格式: platform:model 数组，如 ['kegeai:deepseek-v3.2', 'kegeai:gemini-3-pro-image-preview']
  */
 export type FeatureBindings = Record<AIFeature, string[] | null>;
 
@@ -262,11 +262,12 @@ export interface APIConfigStatus {
 
 /**
  * 供应商信息映射
- * 1. memefast - 魔因API，全功能 AI 中转（推荐）
+ * 1. kegeai - 国际API+，全功能 AI 中转（推荐）
  * 2. runninghub - RunningHub，视角切换/多角度生成
  */
 const PROVIDER_INFO: Record<ProviderId, { name: string; services: ServiceType[] }> = {
-  memefast: { name: '魔因API', services: ['chat', 'image', 'video', 'vision'] },
+  kegeai: { name: '国际API+', services: ['chat', 'image', 'video', 'vision'] },
+  memefast: { name: '国际API+', services: ['chat', 'image', 'video', 'vision'] }, // Legacy compatibility
   runninghub: { name: 'RunningHub', services: ['image', 'vision'] },
   openai: { name: 'OpenAI', services: [] },
   custom: { name: 'Custom', services: [] },
@@ -291,12 +292,12 @@ const defaultImageHostProviders: ImageHostProvider[] = DEFAULT_IMAGE_HOST_PROVID
   apiKey: '',
 }));
 
-// Pre-fill MemeFast for new users (no API Key, just the provider entry)
-const memefastTemplate = DEFAULT_PROVIDERS.find(p => p.platform === 'memefast');
+// Pre-fill KegeAI for new users (no API Key, just the provider entry)
+const kegeaiTemplate = DEFAULT_PROVIDERS.find(p => p.platform === 'kegeai');
 
 const initialState: APIConfigState = {
-  providers: memefastTemplate
-    ? [{ id: generateId(), ...memefastTemplate, apiKey: '' }]
+  providers: kegeaiTemplate
+    ? [{ id: generateId(), ...kegeaiTemplate, apiKey: '' }]
     : [],
   featureBindings: defaultFeatureBindings,
   apiKeys: {},
@@ -374,10 +375,10 @@ export const useAPIConfigStore = create<APIConfigStore>()(
         try {
           // 用 Set 收集所有 key 的模型，自动去重
           const allModelIds = new Set<string>();
-          const isMemefast = provider.platform === 'memefast';
+          const isMemefast = provider.platform === 'memefast' || provider.platform === 'kegeai';
 
           if (isMemefast) {
-            // MemeFast: /api/pricing_new 获取全量元数据（公开接口）
+            // KegeAI/MemeFast: /api/pricing_new 获取全量元数据（公开接口）
             const domain = baseUrl.replace(/\/v\d+$/, '');
             const pricingUrl = `${domain}/api/pricing_new`;
 

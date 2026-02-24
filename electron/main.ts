@@ -26,15 +26,23 @@ export const RENDERER_DIST = path.join(__dirname, '../renderer')
 
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST
 
+// Debug: Log the dev server URL
+console.log('[Main] VITE_DEV_SERVER_URL:', VITE_DEV_SERVER_URL)
+console.log('[Main] __dirname:', __dirname)
+console.log('[Main] APP_ROOT:', process.env.APP_ROOT)
+
 let win: BrowserWindow | null
 
 function createWindow() {
+  const iconPath = path.join(process.env.APP_ROOT, 'build/icon.png')
+
   win = new BrowserWindow({
-    title: '魔因漫创',
+    title: '坤坤漫创工具箱',
     width: 1400,
     height: 900,
     minWidth: 1200,
     minHeight: 700,
+    icon: iconPath,
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.cjs'),
     },
@@ -62,9 +70,16 @@ function createWindow() {
     shell.openExternal(url)
   })
 
-  if (VITE_DEV_SERVER_URL) {
-    win.loadURL(VITE_DEV_SERVER_URL)
+  // In development, always use the dev server
+  // electron-vite sometimes fails to inject VITE_DEV_SERVER_URL properly
+  const isDev = process.env.NODE_ENV !== 'production' && !app.isPackaged
+
+  if (isDev || VITE_DEV_SERVER_URL) {
+    const devUrl = VITE_DEV_SERVER_URL || 'http://localhost:5173'
+    console.log('[Main] Loading dev server:', devUrl)
+    win.loadURL(devUrl)
   } else {
+    console.log('[Main] Loading production build')
     win.loadFile(path.join(RENDERER_DIST, 'index.html'))
   }
 }

@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="build/icon.png" width="120" alt="魔因漫创 Logo" />
+  <img src="docs/images/logo.png" width="120" alt="原创魔因漫创 Logo" />
 </p>
 
-<h1 align="center">魔因漫创 Moyin Creator</h1>
+<h1 align="center">原创魔因漫创</h1>
 
 <p align="center">
   <strong>🎬 AI 影视生产级工具 · 支持 Seedance 2.0 · 剧本到成片全流程批量化</strong>

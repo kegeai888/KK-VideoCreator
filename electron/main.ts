@@ -42,10 +42,17 @@ function createWindow() {
     height: 900,
     minWidth: 1200,
     minHeight: 700,
+    show: false,
     icon: iconPath,
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.cjs'),
     },
+  })
+
+  win.once('ready-to-show', () => {
+    if (!win || win.isDestroyed()) return
+    win.maximize()
+    win.show()
   })
 
   // Test active push message to Renderer-process.

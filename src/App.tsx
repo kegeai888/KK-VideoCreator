@@ -53,7 +53,7 @@ function App() {
   // 迁移中显示加载界面
   if (isMigrating) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center bg-background">
+      <div className="min-h-screen w-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
           <p className="text-muted-foreground">正在初始化...</p>
@@ -63,7 +63,7 @@ function App() {
   }
 
   return (
-    <div className="h-screen w-screen overflow-hidden">
+    <div className="h-screen w-screen overflow-y-auto overflow-x-hidden">
       <Layout />
       <Toaster richColors position="top-center" />
     </div>

@@ -33,7 +33,7 @@ export function Layout() {
     return (
       <div className="h-full flex bg-background">
         <TabBar />
-        <div className="flex-1">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden">
           {activeTab === "settings" ? <SettingsPanel /> : <Dashboard />}
         </div>
       </div>
@@ -47,7 +47,7 @@ export function Layout() {
     return (
       <div className="h-full flex bg-background">
         <TabBar />
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col min-h-0 overflow-y-auto overflow-x-hidden">
           <ProjectHeader />
           {activeTab === "export" && <ExportView />}
           {activeTab === "settings" && <SettingsPanel />}
@@ -96,8 +96,7 @@ export function Layout() {
       {/* Left: TabBar - full height */}
       <TabBar />
 
-      {/* Right content area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-h-0">
         {/* Top: Project Header with save status */}
         <ProjectHeader />
         

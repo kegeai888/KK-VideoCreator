@@ -9,6 +9,7 @@
  */
 
 import { useState, useCallback } from "react";
+import faviconImg from "../../public/favicon.png";
 import { useProjectStore } from "@/stores/project-store";
 import { useMediaPanelStore } from "@/stores/media-panel-store";
 import { switchProject } from "@/lib/project-switcher";
@@ -279,7 +280,7 @@ export function Dashboard() {
       <div className="h-16 border-b border-border bg-panel px-8 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-4">
           <div className="w-10 h-10 flex items-center justify-center">
-            <img src="/favicon.png" alt="Logo" className="w-10 h-10" />
+            <img src={faviconImg} alt="Logo" className="w-10 h-10" />
           </div>
           <div>
             <h1 className="text-lg font-bold text-foreground tracking-wide">坤坤漫创工具箱</h1>

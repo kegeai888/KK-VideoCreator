@@ -54,9 +54,7 @@ import {
   Check,
   X,
   Loader2,
-  MessageSquare,
   Zap,
-  ScanEye,
   Info,
   Image,
   RotateCcw,
@@ -329,7 +327,11 @@ export function SettingsPanel() {
       assignCharactersToProject(activeProjectId);
     }
     // Rehydrate to load/unload other projects' data
-    try { await useCharacterLibraryStore.persist.rehydrate(); } catch {}
+    try {
+      await useCharacterLibraryStore.persist.rehydrate();
+    } catch (error) {
+      console.warn("Failed to rehydrate character library store:", error);
+    }
   };
 
   const handleToggleShareScenes = async (checked: boolean) => {
@@ -337,7 +339,11 @@ export function SettingsPanel() {
     if (!checked && activeProjectId) {
       assignScenesToProject(activeProjectId);
     }
-    try { await useSceneStore.persist.rehydrate(); } catch {}
+    try {
+      await useSceneStore.persist.rehydrate();
+    } catch (error) {
+      console.warn("Failed to rehydrate scene store:", error);
+    }
   };
 
   const handleToggleShareMedia = async (checked: boolean) => {
@@ -345,7 +351,11 @@ export function SettingsPanel() {
     if (!checked && activeProjectId) {
       assignMediaToProject(activeProjectId);
     }
-    try { await useMediaStore.persist.rehydrate(); } catch {}
+    try {
+      await useMediaStore.persist.rehydrate();
+    } catch (error) {
+      console.warn("Failed to rehydrate media store:", error);
+    }
   };
 
   // Unified storage handlers
@@ -1436,7 +1446,7 @@ export function SettingsPanel() {
             }
           }
           // 添加后自动同步模型列表和端点元数据
-          const finalProviderId = existingMemefast ? existingMemefast.id : provider.id;
+          const finalProviderId = existingKegeai ? existingKegeai.id : provider.id;
           if (parseApiKeys(providerData.apiKey).length > 0) {
             setSyncingProvider(finalProviderId);
             syncProviderModels(finalProviderId).then(result => {

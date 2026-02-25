@@ -10,15 +10,78 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ChevronLeft, LayoutDashboard, Settings, Sun, Moon, HelpCircle } from "lucide-react";
+import { ChevronLeft, LayoutDashboard, Settings, Sun, Moon, HelpCircle, Info } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useState } from "react";
+import wechatContactImg from "../../docs/images/wechat-contact.jpg";
+
+function AboutDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>关于</DialogTitle>
+        </DialogHeader>
+        <div className="text-left text-sm space-y-3 py-2 leading-relaxed pl-2">
+          <p>本软件使用为免费，其他第三方付费并非本软件包含的功能，用户也可以自由使用其他第三方API接口</p>
+          <p>
+            本软件遵守{" "}
+            <a
+              href="https://www.gnu.org/licenses/agpl-3.0.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary underline"
+            >
+              【AGPL 3.0 协议】
+            </a>
+          </p>
+          <p>
+            原github地址：{" "}
+            <a
+              href="https://github.com/MemeCalculate/moyin-creator"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary underline break-all"
+            >
+              https://github.com/MemeCalculate/moyin-creator
+            </a>
+          </p>
+          <p>
+            二次修改地址：{" "}
+            <a
+              href="https://github.com/kegeai888/KK-VideoCreator"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary underline break-all"
+            >
+              https://github.com/kegeai888/KK-VideoCreator
+            </a>
+          </p>
+          <p>感谢作者开源免费使用🙏，版权©️归原作者所有</p>
+          <p>如果需要与其他用户一起进行技术交流加微信号：365457644</p>
+          <div className="flex justify-center pt-2">
+            <img src={wechatContactImg} alt="微信联系" width={300} style={{ height: "auto" }} />
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 export function TabBar() {
   const { activeTab, inProject, setActiveTab, setInProject } = useMediaPanelStore();
   const { theme, toggleTheme } = useThemeStore();
+  const [aboutOpen, setAboutOpen] = useState(false);
 
   // Dashboard mode
   if (!inProject) {
     return (
+      <>
       <div className="flex flex-col w-14 bg-panel border-r border-border py-2">
         <div className="p-2">
           <div className="w-8 h-8 bg-primary text-primary-foreground flex items-center justify-center mx-auto rounded">
@@ -47,7 +110,7 @@ export function TabBar() {
             </Tooltip>
           </TooltipProvider>
         </nav>
-        {/* Bottom: Help + Settings + Theme */}
+        {/* Bottom: Help + About + Settings + Theme */}
         <div className="mt-auto border-t border-border py-1">
           <TooltipProvider delayDuration={300}>
             <Tooltip>
@@ -63,6 +126,20 @@ export function TabBar() {
                 </a>
               </TooltipTrigger>
               <TooltipContent side="right">使用帮助</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider delayDuration={300}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={() => setAboutOpen(true)}
+                  className="w-full flex flex-col items-center py-2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <Info className="h-4 w-4" />
+                  <span className="text-[8px]">关于</span>
+                </button>
+              </TooltipTrigger>
+              <TooltipContent side="right">关于本软件</TooltipContent>
             </Tooltip>
           </TooltipProvider>
           <TooltipProvider delayDuration={300}>
@@ -101,11 +178,14 @@ export function TabBar() {
           </TooltipProvider>
         </div>
       </div>
+      <AboutDialog open={aboutOpen} onClose={() => setAboutOpen(false)} />
+      </>
     );
   }
 
   // Project mode - flat navigation
   return (
+    <>
     <div className="flex flex-col w-14 bg-panel border-r border-border">
       {/* Logo + Back */}
       <div className="p-2 border-b border-border">
@@ -159,7 +239,7 @@ export function TabBar() {
         })}
       </nav>
 
-      {/* Bottom: Help + Settings + Theme */}
+      {/* Bottom: Help + About + Settings + Theme */}
       <div className="mt-auto border-t border-border py-1">
         <TooltipProvider delayDuration={300}>
           <Tooltip>
@@ -175,6 +255,20 @@ export function TabBar() {
               </a>
             </TooltipTrigger>
             <TooltipContent side="right">使用帮助</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <TooltipProvider delayDuration={300}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => setAboutOpen(true)}
+                className="w-full flex flex-col items-center py-2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Info className="h-4 w-4" />
+                <span className="text-[8px]">关于</span>
+              </button>
+            </TooltipTrigger>
+            <TooltipContent side="right">关于本软件</TooltipContent>
           </Tooltip>
         </TooltipProvider>
         {bottomNavItems.map((item) => {
@@ -220,5 +314,7 @@ export function TabBar() {
         </TooltipProvider>
       </div>
     </div>
+    <AboutDialog open={aboutOpen} onClose={() => setAboutOpen(false)} />
+    </>
   );
 }

@@ -1,142 +1,153 @@
-# 项目维护记录 (TODO & 修改日志)
+# 项目维护记录（二次开发 / 优化 / 修复 / 经验沉淀）
 
-> 本文档记录对「坤坤漫创工具箱」的所有二次开发、优化和修复工作，方便后续维护和回溯。
-
----
-
-## 📅 2026-02-25 品牌升级改造
-
-### 🎯 改造目标
-将原「魔因漫创」品牌升级为「坤坤漫创工具箱」，包括视觉标识、命名和用户界面的全面更新。
-
-### ✅ 已完成的修改
-
-#### 1. 品牌标识更新
-- **Logo 替换**
-  - 源文件：`docs/images/logo.png` (66KB)
-  - 目标位置：
-    - `build/icon.png` - Electron 任务栏图标
-    - `public/favicon.png` - 网页标题栏图标
-  - 影响范围：桌面应用任务栏、浏览器标签页、Dashboard 页面
-
-#### 2. 应用名称修改
-- **Electron 主进程** (`electron/main.ts:40`)
-  - 窗口标题：`魔因漫创` → `坤坤漫创工具箱`
-
-- **Dashboard 页面** (`src/components/Dashboard.tsx:285`)
-  - 主标题：`魔因漫创` → `坤坤漫创工具箱`
-  - 副标题保持：`Moyin Creator Studio`
-  - Logo 显示：从 Aperture SVG 图标改为 `/favicon.png` 图片
-
-#### 3. 侧边栏标识修改
-- **TabBar 组件** (`src/components/TabBar.tsx:25, 113`)
-  - 品牌字母标识：`M` → `K`
-  - 影响位置：
-    - Dashboard 模式侧边栏顶部
-    - Project 模式侧边栏顶部
-
-### 📂 涉及文件清单
-```
-修改的文件：
-├── electron/main.ts              # Electron 窗口标题
-├── src/components/Dashboard.tsx  # Dashboard 主标题和 Logo
-├── src/components/TabBar.tsx     # 侧边栏品牌标识
-├── build/icon.png                # 任务栏图标（已替换）
-└── public/favicon.png            # 网页图标（已替换）
-
-资源文件：
-└── docs/images/logo.png          # 品牌 Logo 源文件
-```
-
-### 🔧 技术细节
-
-#### Logo 图片引用方式
-```tsx
-// Dashboard.tsx 中的实现
-<div className="w-10 h-10 flex items-center justify-center">
-  <img src="/favicon.png" alt="Logo" className="w-10 h-10" />
-</div>
-```
-
-#### Electron 图标配置
-```typescript
-// electron/main.ts
-const iconPath = path.join(process.env.APP_ROOT, 'build/icon.png')
-win = new BrowserWindow({
-  title: '坤坤漫创工具箱',
-  icon: iconPath,
-  // ...
-})
-```
-
-### 🚀 部署说明
-1. **开发环境**：修改后自动热更新（Vite HMR）
-2. **生产构建**：需重新执行 `npm run build` 打包
-3. **图标缓存**：Windows 系统可能需要清理图标缓存或重启资源管理器
-
-### ⚠️ 注意事项
-- Logo 文件格式：PNG，尺寸 66KB
-- 保持 `docs/images/logo.png` 为唯一真实源，其他位置为副本
-- 修改品牌名称时需同步更新：
-  - `README.md` 项目介绍
-  - `package.json` 应用名称
-  - 用户文档和帮助链接
+> 目的：沉淀本轮所有改动与发布操作，便于后续维护、定位与回溯。
+> 更新时间：2026-02-25
 
 ---
 
-## 🔮 待办事项 (TODO)
+## 1. 本轮目标与结果总览
 
-### 高优先级
-- [ ] 更新 `README.md` 中的品牌名称和介绍
-- [ ] 更新 `package.json` 中的 `productName` 字段
-- [ ] 检查并更新所有用户可见的文案（设置面板、帮助文档等）
-- [ ] 更新打包配置中的应用名称（`electron-builder.yml`）
+### 目标
+1. Windows 安装后默认不显示英文系统菜单（File/Edit...）。
+2. 按 `Alt` 可调出**中文菜单**。
+3. 统一打包产物命名，安装后应用名保持中文。
+4. 完成多平台构建并上传到 GitHub Release，清理异常/旧命名包。
 
-### 中优先级
-- [ ] 统一代码注释中的品牌名称
-- [ ] 更新 Git 提交历史中的项目描述
-- [ ] 检查是否有硬编码的旧品牌名称
-
-### 低优先级
-- [ ] 考虑是否需要更新 favicon.ico（Windows 图标）
-- [ ] 评估是否需要多尺寸 Logo（macOS .icns）
-- [ ] 准备品牌升级的用户通知文案
+### 结果
+- 已实现：默认隐藏菜单 + 中文菜单模板。
+- 已实现：发布包命名统一为 `kunkun-creator-0.1.7-*`。
+- 已实现：安装后应用显示名仍为 **坤坤漫创**。
+- 已实现：`v0.1.7` Release 资产清理与重传。
 
 ---
 
-## 📝 开发经验总结
+## 2. 代码级改动（主干）
 
-### 品牌升级最佳实践
-1. **集中管理资源**：将 Logo 源文件放在 `docs/images/` 统一管理
-2. **自动化复制**：可考虑在构建脚本中自动复制 Logo 到各目标位置
-3. **版本控制**：品牌资源文件应纳入 Git 版本控制
-4. **文档同步**：品牌修改必须同步更新用户文档
+### 2.1 Electron 菜单与窗口行为优化
+**文件**：`electron/main.ts`
 
-### Electron 图标处理经验
-- **开发模式**：图标路径基于 `APP_ROOT`
-- **生产模式**：图标需打包到 `resources` 目录
-- **跨平台**：Windows 需 `.ico`，macOS 需 `.icns`，Linux 需 `.png`
-- **缓存问题**：系统可能缓存旧图标，需清理或重启
+**改动点**：
+- 引入 `Menu` 与 `MenuItemConstructorOptions`。
+- 新增 `createZhMenuTemplate()`：
+  - 一级菜单：`文件 / 编辑 / 视图 / 窗口 / 帮助`
+  - 子项尽量复用 Electron `role`（撤销、重做、复制粘贴、全屏、开发者工具等），仅中文化 label。
+  - macOS 增加应用菜单（关于/隐藏/退出等）。
+- 在 `app.whenReady()` 设置应用菜单：
+  - `Menu.setApplicationMenu(Menu.buildFromTemplate(createZhMenuTemplate()))`
+- 窗口默认隐藏菜单栏：
+  - `autoHideMenuBar: true`
+  - `menuBarVisible: false`
+  - 窗口创建后再调用：`win.setMenuBarVisibility(false)`（兜底）
 
-### React 组件图片引用
-- **Public 目录**：`/favicon.png` 直接引用 `public/` 下的文件
-- **Assets 目录**：需通过 `import` 导入，Vite 会处理路径
-- **外部 URL**：直接使用完整 URL
-
----
-
-## 🐛 已知问题
-
-### 无
+**效果**：
+- Windows/Linux：默认无顶栏菜单；按 `Alt` 可见中文菜单。
+- macOS：使用中文菜单结构，保持平台行为一致。
 
 ---
 
-## 📚 参考资料
-- [Electron 官方文档 - 应用图标](https://www.electronjs.org/docs/latest/tutorial/application-distribution#application-icon)
-- [Vite 静态资源处理](https://vitejs.dev/guide/assets.html)
-- [React 图片引用最佳实践](https://react.dev/learn/importing-and-exporting-components)
+### 2.2 打包命名策略调整（包名英文、应用名中文）
+**文件**：`electron-builder.yml`
+
+**最终策略**：
+- **安装包/分发文件名**：`kunkun-creator-<version>-*`
+- **安装后应用名**：`坤坤漫创`
+
+**关键配置**：
+- `productName: 坤坤漫创`（显示名）
+- `win.executableName: kunkun-creator`
+- `dmg.artifactName: kunkun-creator-${version}-${arch}.${ext}`
+- `nsis.artifactName: kunkun-creator-${version}-setup.${ext}`
+- `nsis.shortcutName: 坤坤漫创`
+- `nsis.uninstallDisplayName: ${productName}`
 
 ---
 
-**最后更新**：2026-02-25
-**维护者**：项目开发团队
+## 3. 构建与发布操作记录
+
+### 3.1 构建命令
+- mac（Intel + ARM）：`npm run build:mac`
+- windows x64：`npm run build:win`
+
+> 备注：`npm run build` 在 mac 环境会因 `prebuild` 依赖 `powershell` 失败，已改用 `build:mac/build:win` 分开构建。
+
+### 3.2 产物位置（本轮最终）
+`/release/` 下：
+- `kunkun-creator-0.1.7-x64.dmg`
+- `kunkun-creator-0.1.7-arm64.dmg`
+- `kunkun-creator-0.1.7-setup.exe`
+- 对应 `.blockmap`
+- `latest.yml`
+- `latest-mac.yml`
+
+### 3.3 Release 操作（v0.1.7）
+- 已上传新命名资产（`kunkun-creator-*`）。
+- 已删除异常命名资产（`-0.1.7-*`）。
+- 已删除旧命名资产（`moyin-creator-*`）。
+- 当前发布页仅保留新命名资产与 latest 元数据。
+
+发布页：
+- https://github.com/kegeai888/KK-VideoCreator/releases/tag/v0.1.7
+
+---
+
+## 4. Git 提交记录（本轮关键）
+
+- `c5193c5` fix: 默认隐藏菜单并提供中文菜单栏
+- `3791078` fix: 统一 Windows 打包产物为坤坤漫创命名
+- `4886902` fix: 统一发布包命名为 kunkun-creator
+
+> 均已推送到 `origin/main`。
+
+---
+
+## 5. 验证结果与回归结论
+
+### 菜单相关
+- 启动后顶部菜单默认不可见：✅
+- `Alt` 调出菜单且一级菜单中文：✅
+- 常用 role 快捷能力可用（复制粘贴、撤销重做、全屏、开发者工具）：✅
+
+### 构建发布相关
+- mac x64/arm64 构建成功：✅
+- win x64 构建成功：✅
+- Release 资产与命名统一：✅
+
+---
+
+## 6. 经验与教训（可复用）
+
+1. **文件名与显示名分离**最稳：
+   - 文件名用 ASCII（避免发布链路编码坑）
+   - 显示名用中文（品牌一致）
+
+2. **Electron 菜单国际化最小改法**：
+   - 用 `role` 保行为一致，改 `label` 即可中文化。
+
+3. **跨平台构建命令要拆分**：
+   - `build:mac` / `build:win` 分开执行，避免被某一平台 prebuild 脚本阻断。
+
+4. **Release 清理顺序建议**：
+   - 先删异常包/旧包，再传新包，最后校验资产列表。
+
+---
+
+## 7. 当前状态与后续建议
+
+### 当前状态
+- 主分支 `main` 已包含本轮所有关键配置改动。
+- `v0.1.7` Release 已整理完成，可直接分发。
+
+### 建议（后续可选）
+1. 将 `prebuild` 改为跨平台脚本（避免 `powershell` 依赖）。
+2. 增加一个发布脚本（构建→删旧资产→上传→校验）以减少手工失误。
+3. 在 CI 中增加命名规范检查，确保产物前缀固定为 `kunkun-creator-`。
+
+---
+
+## 8. 维护速查（给后续维护者）
+
+- 菜单逻辑入口：`electron/main.ts`
+- 打包命名入口：`electron-builder.yml`
+- 版本号入口：`package.json -> version`
+- 发布目标：GitHub Release `v<version>`
+

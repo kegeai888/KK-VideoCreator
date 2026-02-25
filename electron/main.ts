@@ -1,7 +1,8 @@
 // Copyright (c) 2025 hotflow2024
 // Licensed under AGPL-3.0-or-later. See LICENSE for details.
 // Commercial licensing available. See COMMERCIAL_LICENSE.md.
-import { app, BrowserWindow, ipcMain, protocol, net, dialog, shell } from 'electron'
+import { app, BrowserWindow, ipcMain, protocol, net, dialog, shell, Menu } from 'electron'
+import type { MenuItemConstructorOptions } from 'electron'
 import path from 'node:path'
 import fs from 'node:fs'
 import https from 'node:https'
@@ -33,6 +34,75 @@ console.log('[Main] APP_ROOT:', process.env.APP_ROOT)
 
 let win: BrowserWindow | null
 
+function createZhMenuTemplate(): MenuItemConstructorOptions[] {
+  const template: MenuItemConstructorOptions[] = [
+    {
+      label: '文件',
+      submenu: [
+        { role: 'close', label: '关闭窗口' },
+        { type: 'separator' },
+        { role: 'quit', label: '退出' },
+      ],
+    },
+    {
+      label: '编辑',
+      submenu: [
+        { role: 'undo', label: '撤销' },
+        { role: 'redo', label: '重做' },
+        { type: 'separator' },
+        { role: 'cut', label: '剪切' },
+        { role: 'copy', label: '复制' },
+        { role: 'paste', label: '粘贴' },
+        { role: 'selectAll', label: '全选' },
+      ],
+    },
+    {
+      label: '视图',
+      submenu: [
+        { role: 'reload', label: '重新加载' },
+        { role: 'forceReload', label: '强制重新加载' },
+        { type: 'separator' },
+        { role: 'toggleDevTools', label: '开发者工具' },
+        { type: 'separator' },
+        { role: 'resetZoom', label: '实际大小' },
+        { role: 'zoomIn', label: '放大' },
+        { role: 'zoomOut', label: '缩小' },
+        { type: 'separator' },
+        { role: 'togglefullscreen', label: '切换全屏' },
+      ],
+    },
+    {
+      label: '窗口',
+      submenu: [
+        { role: 'minimize', label: '最小化' },
+        { role: 'zoom', label: '缩放' },
+        { role: 'close', label: '关闭窗口' },
+      ],
+    },
+    {
+      label: '帮助',
+      submenu: [{ role: 'toggleDevTools', label: '开发者工具' }],
+    },
+  ]
+
+  if (process.platform === 'darwin') {
+    template.unshift({
+      label: '应用',
+      submenu: [
+        { role: 'about', label: `关于 ${app.name}` },
+        { type: 'separator' },
+        { role: 'hide', label: '隐藏' },
+        { role: 'hideOthers', label: '隐藏其他' },
+        { role: 'unhide', label: '显示全部' },
+        { type: 'separator' },
+        { role: 'quit', label: '退出' },
+      ],
+    })
+  }
+
+  return template
+}
+
 function createWindow() {
   const iconPath = path.join(process.env.APP_ROOT, 'build/icon.png')
 
@@ -44,10 +114,14 @@ function createWindow() {
     minHeight: 700,
     show: false,
     icon: iconPath,
+    autoHideMenuBar: true,
+    menuBarVisible: false,
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.cjs'),
     },
   })
+
+  win.setMenuBarVisibility(false)
 
   win.once('ready-to-show', () => {
     if (!win || win.isDestroyed()) return
@@ -1097,6 +1171,8 @@ protocol.registerSchemesAsPrivileged([{
 }])
 
 app.whenReady().then(() => {
+  Menu.setApplicationMenu(Menu.buildFromTemplate(createZhMenuTemplate()))
+
   // Seed demo project on first run (before window creation)
   seedDemoProject()
 

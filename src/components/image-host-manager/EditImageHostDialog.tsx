@@ -62,22 +62,9 @@ export function EditImageHostDialog({
     }
   }, [provider]);
 
-  const handleSave = () => {
-    if (!provider) return;
-    if (!name.trim()) {
-      toast.error("请输入名称");
-      return;
-    }
-    if (!baseUrl.trim() && !uploadPath.trim()) {
-      toast.error("请配置 Base URL 或 Upload Path");
-      return;
-    }
-    if (!apiKey.trim()) {
-      toast.error("请输入 API Key");
-      return;
-    }
-
-    onSave({
+  const buildPayload = (): ImageHostProvider | null => {
+    if (!provider) return null;
+    return {
       ...provider,
       name: name.trim(),
       baseUrl: baseUrl.trim(),
@@ -91,93 +78,104 @@ export function EditImageHostDialog({
       nameField: nameField.trim() || undefined,
       responseUrlField: responseUrlField.trim() || undefined,
       responseDeleteUrlField: responseDeleteUrlField.trim() || undefined,
-    });
+    };
+  };
 
+  const handleSave = () => {
+    if (!provider) return;
+    if (!name.trim()) { toast.error("请输入名称"); return; }
+    if (!baseUrl.trim() && !uploadPath.trim()) { toast.error("请配置 Base URL 或 Upload Path"); return; }
+    if (!apiKey.trim()) { toast.error("请输入 API Key"); return; }
+    const payload = buildPayload();
+    if (payload) { onSave(payload); toast.success("已保存更改"); }
     onOpenChange(false);
-    toast.success("已保存更改");
+  };
+
+  // 关闭时若 apiKey 已填写则自动保存
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen && apiKey.trim() && provider) {
+      const payload = buildPayload();
+      if (payload) { onSave(payload); toast.success("已自动保存"); }
+    }
+    onOpenChange(nextOpen);
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-lg">
-        <DialogHeader>
+        <DialogHeader className="pb-1">
           <DialogTitle>编辑图床服务商</DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-col gap-4 py-4">
-          <div className="space-y-2">
-            <Label className="text-muted-foreground">平台</Label>
-            <Input value={provider?.platform || ""} disabled className="bg-muted" />
-          </div>
-
-          <div className="space-y-2">
-            <Label>名称</Label>
-            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="图床名称" />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Base URL</Label>
-            <Input value={baseUrl} onChange={(e) => setBaseUrl(e.target.value)} placeholder="https://api.example.com" />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Upload Path / URL</Label>
-            <Input value={uploadPath} onChange={(e) => setUploadPath(e.target.value)} placeholder="/upload 或完整 URL" />
-          </div>
-
-          <div className="space-y-2">
-            <Label>API Keys</Label>
-            <Textarea
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              placeholder="输入 API Keys（每行一个，或用逗号分隔）"
-              className="font-mono text-sm min-h-[80px]"
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <Label>启用</Label>
-            <Switch checked={enabled} onCheckedChange={setEnabled} />
-          </div>
-
-          <div className="space-y-2">
-            <Label className="text-sm text-muted-foreground">高级配置（可选）</Label>
+        <div className="max-h-[60vh] overflow-y-auto pr-1">
+          <div className="flex flex-col gap-3 py-2">
+            {/* 第一行：平台 + 名称 */}
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
-                <Label className="text-xs">API Key Query 参数</Label>
-                <Input value={apiKeyParam} onChange={(e) => setApiKeyParam(e.target.value)} placeholder="key" />
+                <Label className="text-xs text-muted-foreground">平台</Label>
+                <Input value={provider?.platform || ""} disabled className="bg-muted h-8 text-sm" />
               </div>
               <div className="space-y-1">
-                <Label className="text-xs">API Key Header</Label>
-                <Input value={apiKeyHeader} onChange={(e) => setApiKeyHeader(e.target.value)} placeholder="Authorization" />
+                <Label className="text-xs">名称</Label>
+                <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="图床名称" className="h-8 text-sm" />
+              </div>
+            </div>
+
+            {/* 第二行：Base URL + Upload Path */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <Label className="text-xs">Base URL</Label>
+                <Input value={baseUrl} onChange={(e) => setBaseUrl(e.target.value)} placeholder="https://api.example.com" className="h-8 text-sm" />
               </div>
               <div className="space-y-1">
-                <Label className="text-xs">过期参数</Label>
-                <Input value={expirationParam} onChange={(e) => setExpirationParam(e.target.value)} placeholder="expiration" />
+                <Label className="text-xs">Upload Path / URL</Label>
+                <Input value={uploadPath} onChange={(e) => setUploadPath(e.target.value)} placeholder="/upload 或完整 URL" className="h-8 text-sm" />
               </div>
-              <div className="space-y-1">
-                <Label className="text-xs">图片字段名</Label>
-                <Input value={imageField} onChange={(e) => setImageField(e.target.value)} placeholder="image" />
-              </div>
-              <div className="space-y-1">
-                <Label className="text-xs">名称字段名</Label>
-                <Input value={nameField} onChange={(e) => setNameField(e.target.value)} placeholder="name" />
-              </div>
-              <div className="space-y-1">
-                <Label className="text-xs">返回 URL 字段</Label>
-                <Input value={responseUrlField} onChange={(e) => setResponseUrlField(e.target.value)} placeholder="data.url" />
-              </div>
-              <div className="space-y-1">
-                <Label className="text-xs">删除 URL 字段</Label>
-                <Input value={responseDeleteUrlField} onChange={(e) => setResponseDeleteUrlField(e.target.value)} placeholder="data.delete_url" />
+            </div>
+
+            {/* API Keys */}
+            <div className="space-y-1">
+              <Label className="text-xs">API Keys</Label>
+              <Textarea
+                value={apiKey}
+                onChange={(e) => setApiKey(e.target.value)}
+                placeholder="输入 API Keys（每行一个，或用逗号分隔）"
+                className="font-mono text-sm min-h-[60px] max-h-[80px]"
+              />
+            </div>
+
+            {/* 启用 */}
+            <div className="flex items-center justify-between py-0.5">
+              <Label className="text-xs">启用</Label>
+              <Switch checked={enabled} onCheckedChange={setEnabled} />
+            </div>
+
+            {/* 高级配置 */}
+            <div className="space-y-1.5">
+              <Label className="text-xs text-muted-foreground">高级配置（可选）</Label>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { label: "API Key Query 参数", value: apiKeyParam, setter: setApiKeyParam, placeholder: "key" },
+                  { label: "API Key Header", value: apiKeyHeader, setter: setApiKeyHeader, placeholder: "Authorization" },
+                  { label: "过期参数", value: expirationParam, setter: setExpirationParam, placeholder: "expiration" },
+                  { label: "图片字段名", value: imageField, setter: setImageField, placeholder: "image" },
+                  { label: "名称字段名", value: nameField, setter: setNameField, placeholder: "name" },
+                  { label: "返回 URL 字段", value: responseUrlField, setter: setResponseUrlField, placeholder: "data.url" },
+                  { label: "删除 URL 字段", value: responseDeleteUrlField, setter: setResponseDeleteUrlField, placeholder: "data.delete_url" },
+                ].map(({ label, value, setter, placeholder }) => (
+                  <div key={label} className="space-y-0.5">
+                    <Label className="text-xs text-muted-foreground">{label}</Label>
+                    <Input value={value} onChange={(e) => setter(e.target.value)} placeholder={placeholder} className="h-7 text-xs" />
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>取消</Button>
-          <Button onClick={handleSave}>保存</Button>
+        <DialogFooter className="pt-2">
+          <Button variant="outline" size="sm" onClick={() => handleOpenChange(false)}>取消</Button>
+          <Button size="sm" onClick={handleSave}>保存</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -311,7 +311,7 @@ export function Dashboard() {
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-8">
-        <div className="max-w-5xl mx-auto">
+        <div className="w-full max-w-[1400px] mx-auto">
           {/* Section Header */}
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -373,7 +373,13 @@ export function Dashboard() {
           )}
 
           {/* Project Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className={cn(
+            "grid gap-4",
+            sortedProjects.length === 1 && "grid-cols-1 max-w-xs mx-auto",
+            sortedProjects.length === 2 && "grid-cols-2 max-w-xl mx-auto",
+            sortedProjects.length === 3 && "grid-cols-3 max-w-2xl mx-auto",
+            sortedProjects.length >= 4 && "grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
+          )}>
             {sortedProjects.map((project) => {
               const isSelected = selectedIds.has(project.id);
               const isDuplicating = duplicatingId === project.id;

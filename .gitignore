@@ -72,3 +72,6 @@ S级*
 *.njsproj
 *.sln
 *.sw?
+
+# Local worktrees
+.worktrees/

@@ -21,7 +21,7 @@ asarUnpack:
 icon: build/icon.ico
 
 win:
-  executableName: 坤坤漫创
+  executableName: kunkun-creator
   icon: build/icon.ico
   forceCodeSigning: false
   target:
@@ -43,7 +43,7 @@ mac:
         - arm64
 
 dmg:
-  artifactName: ${productName}-${version}-${arch}.${ext}
+  artifactName: kunkun-creator-${version}-${arch}.${ext}
   title: ${productName} ${version}
   icon: build/icon.icns
   background: null
@@ -61,7 +61,7 @@ dmg:
 
 # NSIS 安装包配置
 nsis:
-  artifactName: ${productName}-${version}-setup.${ext}
+  artifactName: kunkun-creator-${version}-setup.${ext}
   shortcutName: 坤坤漫创
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always

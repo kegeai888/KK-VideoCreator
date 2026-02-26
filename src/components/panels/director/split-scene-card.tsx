@@ -9,7 +9,7 @@
  * 用于 SplitScene 类型（与 scene-card.tsx 中的 AIScene 类型不同）
  */
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -165,7 +165,17 @@ export function SplitSceneCard({
   const [selectedFrameTarget, setSelectedFrameTarget] = useState<'start' | 'end'>('start');
   const endFrameInputRef = useRef<HTMLInputElement>(null);
   const firstFrameInputRef = useRef<HTMLInputElement>(null);
+  const dialogueTextareaRef = useRef<HTMLTextAreaElement>(null);
   const { setPreviewItem } = usePreviewStore();
+
+  // 自动调整对白文本框高度
+  useEffect(() => {
+    const textarea = dialogueTextareaRef.current;
+    if (textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = `${Math.min(textarea.scrollHeight, 120)}px`;
+    }
+  }, [scene.dialogue]);
 
   // Compute effective display URLs: imageDataUrl → imageHttpUrl fallback
   // (partialize strips data: base64 on save; imageHttpUrl may survive as external URL)
@@ -1287,12 +1297,12 @@ export function SplitSceneCard({
               对白
             </button>
             <Textarea
+              ref={dialogueTextareaRef}
               value={scene.dialogue || ''}
               onChange={(e) => onUpdateField?.(scene.id, 'dialogue', e.target.value)}
               placeholder="角色台词..."
               disabled={isGeneratingAny || scene.audioDialogueEnabled === false}
-              className="flex-1 min-h-[24px] max-h-[120px] px-1.5 py-1 text-[10px] rounded border bg-transparent disabled:opacity-40 placeholder:text-muted-foreground/30 resize-none"
-              rows={1}
+              className="flex-1 min-h-[24px] max-h-[120px] px-1.5 py-1 text-[10px] rounded border bg-transparent disabled:opacity-40 placeholder:text-muted-foreground/30 resize-none overflow-y-auto"
             />
           </div>
           {/* 背景音乐 */}

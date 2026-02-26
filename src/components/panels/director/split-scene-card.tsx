@@ -961,7 +961,7 @@ export function SplitSceneCard({
                     className="flex items-start gap-2 cursor-pointer p-1.5 rounded bg-blue-500/5 hover:bg-blue-500/10 transition-colors border border-blue-500/10"
                     onClick={() => !isGeneratingAny && startEditing('image')}
                   >
-                    <p className="text-[11px] text-muted-foreground flex-1 line-clamp-2 min-h-[1.5em]">
+                    <p className="text-[11px] text-muted-foreground flex-1 whitespace-pre-wrap break-words min-h-[1.5em]">
                       {scene.imagePromptZh || scene.imagePrompt || "点击添加首帧描述..."}
                     </p>
                     {!isGeneratingAny && <Edit3 className="h-2.5 w-2.5 text-blue-500/50 shrink-0 mt-0.5" />}
@@ -1004,7 +1004,7 @@ export function SplitSceneCard({
                     onClick={() => !isGeneratingAny && startEditing('endFrame')}
                   >
                     <p className={cn(
-                      "text-[11px] flex-1 line-clamp-2 min-h-[1.5em]",
+                      "text-[11px] flex-1 whitespace-pre-wrap break-words min-h-[1.5em]",
                       "text-orange-600 dark:text-orange-400"
                     )}>
                       {scene.endFramePromptZh || scene.endFramePrompt || (scene.needsEndFrame ? "点击添加尾帧描述..." : "点击添加尾帧描述...（可选）")}
@@ -1044,7 +1044,7 @@ export function SplitSceneCard({
                     className="flex items-start gap-2 cursor-pointer p-1.5 rounded bg-green-500/5 hover:bg-green-500/10 transition-colors border border-green-500/10"
                     onClick={() => !isGeneratingAny && startEditing('video')}
                   >
-                    <p className="text-[11px] text-green-600 dark:text-green-400 flex-1 line-clamp-2 min-h-[1.5em]">
+                    <p className="text-[11px] text-green-600 dark:text-green-400 flex-1 whitespace-pre-wrap break-words min-h-[1.5em]">
                       {scene.videoPromptZh || scene.videoPrompt || "点击添加动作描述..."}
                     </p>
                     {!isGeneratingAny && <Edit3 className="h-2.5 w-2.5 text-green-500/50 shrink-0 mt-0.5" />}
@@ -1058,31 +1058,31 @@ export function SplitSceneCard({
               className="space-y-1 p-2 rounded-md bg-muted/20 cursor-pointer hover:bg-muted/40 transition-colors border border-transparent hover:border-muted"
               onClick={() => setShowPromptDetails(true)}
             >
-              <p className="text-[10px] truncate flex items-center gap-1.5">
+              <p className="text-[10px] flex items-start gap-1.5">
                 <span className="shrink-0 inline-flex items-center gap-0.5 text-violet-600 dark:text-violet-400 font-medium">
                   <Edit3 className="h-2.5 w-2.5" /> 剧本:
                 </span>
-                <span className="text-muted-foreground">{scene.actionSummary || '未设置'}</span>
+                <span className="text-muted-foreground whitespace-pre-wrap break-words flex-1">{scene.actionSummary || '未设置'}</span>
               </p>
-              <p className="text-[10px] truncate flex items-center gap-1.5">
+              <p className="text-[10px] flex items-start gap-1.5">
                 <span className="shrink-0 inline-flex items-center gap-0.5 text-blue-600 dark:text-blue-400 font-medium">
                   <ImageIcon className="h-2.5 w-2.5" /> 首帧:
                 </span>
-                <span className="text-muted-foreground">{scene.imagePromptZh || scene.imagePrompt || '未设置'}</span>
+                <span className="text-muted-foreground whitespace-pre-wrap break-words flex-1">{scene.imagePromptZh || scene.imagePrompt || '未设置'}</span>
               </p>
               {(scene.needsEndFrame || scene.endFramePromptZh || scene.endFramePrompt) && (
-                <p className="text-[10px] truncate flex items-center gap-1.5">
+                <p className="text-[10px] flex items-start gap-1.5">
                   <span className="shrink-0 inline-flex items-center gap-0.5 text-orange-600 dark:text-orange-400 font-medium">
                     ◉ 尾帧:
                   </span>
-                  <span className="text-orange-600/70 dark:text-orange-400/70">{scene.endFramePromptZh || scene.endFramePrompt || '未设置'}</span>
+                  <span className="text-orange-600/70 dark:text-orange-400/70 whitespace-pre-wrap break-words flex-1">{scene.endFramePromptZh || scene.endFramePrompt || '未设置'}</span>
                 </p>
               )}
-              <p className="text-[10px] truncate flex items-center gap-1.5">
+              <p className="text-[10px] flex items-start gap-1.5">
                 <span className="shrink-0 inline-flex items-center gap-0.5 text-green-600 dark:text-green-400 font-medium">
                   <Play className="h-2.5 w-2.5" /> 视频:
                 </span>
-                <span className="text-muted-foreground">
+                <span className="text-muted-foreground whitespace-pre-wrap break-words flex-1">
                   {scene.videoPromptZh || scene.videoPrompt || '未设置'}
                 {scene.cameraMovement && scene.cameraMovement !== 'none' && (
                     <span className="ml-1 text-green-500/50">[{CAMERA_MOVEMENT_PRESETS.find(p => p.id === scene.cameraMovement)?.label || scene.cameraMovement}]</span>

@@ -116,7 +116,7 @@ export function Layout() {
 
             {/* Center: Preview */}
             <ResizablePanel id="moyin-center-panel" defaultSize={52} minSize={25}>
-              <div className="h-full overflow-hidden">
+              <div className="h-full overflow-auto">
                 <PreviewPanel />
               </div>
             </ResizablePanel>

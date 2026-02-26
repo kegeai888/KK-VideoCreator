@@ -50,7 +50,7 @@ export function PreviewPanel() {
 
   return (
     <div className="h-full flex flex-col bg-neutral-200 dark:bg-neutral-900">
-      <div className="flex-1 flex items-center justify-center overflow-hidden">
+      <div className="flex-1 flex items-center justify-center overflow-auto p-0 m-0">
         {previewItem.type === "image" ? (
           <img
             src={previewItem.url}
@@ -62,16 +62,16 @@ export function PreviewPanel() {
             ref={videoRef}
             src={previewItem.url}
             controls
-            className="max-w-full max-h-full"
+            className="w-full h-full object-contain"
+            style={{ maxWidth: "100%", maxHeight: "100%" }}
           >
             Your browser does not support the video tag.
           </video>
         )}
       </div>
       {previewItem.name && (
-        <div className="p-2 bg-background/80 text-center text-sm truncate">
-          {previewItem.name}
-        </div>
+        <div className="p-2 bg-background/80 text-center text-sm truncate shrink-0">
+          {previewItem.name}</div>
       )}
     </div>
   );

@@ -106,7 +106,7 @@ export function Layout() {
         <ResizablePanel defaultSize={85} minSize={50}>
           <ResizablePanelGroup direction="horizontal">
             {/* Left Panel: Content based on active tab */}
-            <ResizablePanel id="moyin-left-panel" defaultSize={28} minSize={25} maxSize={45}>
+            <ResizablePanel id="moyin-left-panel" defaultSize={28} minSize={15} maxSize={45}>
               <div className="h-full overflow-hidden bg-panel border-r border-border">
                 {renderLeftPanel()}
               </div>
@@ -124,7 +124,7 @@ export function Layout() {
             <ResizableHandle />
 
             {/* Right: Properties */}
-            <ResizablePanel id="moyin-right-panel" defaultSize={20} minSize={15} maxSize={35}>
+            <ResizablePanel id="moyin-right-panel" defaultSize={20} minSize={10} maxSize={35}>
               <div className="h-full overflow-hidden border-l border-border">
                 {renderRightPanel()}
               </div>

@@ -1273,7 +1273,7 @@ export function SplitSceneCard({
             />
           </div>
           {/* 对白 */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-start gap-1.5">
             <button
               onClick={() => onUpdateField?.(scene.id, 'audioDialogueEnabled', scene.audioDialogueEnabled === false)}
               disabled={isGeneratingAny}
@@ -1286,13 +1286,13 @@ export function SplitSceneCard({
             >
               对白
             </button>
-            <input
-              type="text"
+            <Textarea
               value={scene.dialogue || ''}
               onChange={(e) => onUpdateField?.(scene.id, 'dialogue', e.target.value)}
               placeholder="角色台词..."
               disabled={isGeneratingAny || scene.audioDialogueEnabled === false}
-              className="flex-1 h-6 px-1.5 text-[10px] rounded border bg-transparent disabled:opacity-40 placeholder:text-muted-foreground/30"
+              className="flex-1 min-h-[24px] max-h-[120px] px-1.5 py-1 text-[10px] rounded border bg-transparent disabled:opacity-40 placeholder:text-muted-foreground/30 resize-none"
+              rows={1}
             />
           </div>
           {/* 背景音乐 */}

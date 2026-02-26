@@ -745,8 +745,8 @@ export function ShotGridView({ onGenerateImage, onGenerateVideo }: ShotGridViewP
                 </div>
 
                 {/* Video Generation */}
-                <div className="bg-[#141414] rounded-lg p-4 border border-zinc-800 space-y-3">
-                  <div className="flex items-center justify-between">
+                <div className="bg-[#141414] rounded-lg p-4 border border-zinc-800 space-y-3 flex flex-col min-h-0">
+                  <div className="flex items-center justify-between shrink-0">
                     <span className="text-xs font-medium text-white flex items-center gap-1.5">
                       <Video className="w-3.5 h-3.5 text-indigo-500" />
                       视频生成
@@ -757,16 +757,16 @@ export function ShotGridView({ onGenerateImage, onGenerateVideo }: ShotGridViewP
                   </div>
 
                   {activeShot.videoUrl || activeShot.interval?.videoUrl ? (
-                    <div className="w-full flex justify-start">
+                    <div className="w-full flex items-center justify-center flex-1 min-h-0">
                       <video
                         src={activeShot.videoUrl || activeShot.interval?.videoUrl}
                         controls
-                        className="max-w-full max-h-[40vh] object-contain bg-black rounded border border-zinc-700"
-                        style={{ width: "auto", height: "auto", maxWidth: "100%" }}
+                        className="w-full h-full object-contain bg-black rounded border border-zinc-700"
+                        style={{ maxWidth: "100%", maxHeight: "100%" }}
                       />
                     </div>
                   ) : (
-                    <div className="w-full aspect-video bg-zinc-900/50 rounded border border-dashed border-zinc-800 flex items-center justify-center">
+                    <div className="w-full aspect-video bg-zinc-900/50 rounded border border-dashed border-zinc-800 flex items-center justify-center shrink-0">
                       <span className="text-xs text-zinc-600 font-mono">预览区域</span>
                     </div>
                   )}
